@@ -8,6 +8,8 @@ describe('When: Use the search feature', () => {
 
     cy.get('form').submit();
 
+    cy.wait(2000);
+
     cy.get('[data-testing="book-item"]').should('have.length.greaterThan', 1);
   });
 

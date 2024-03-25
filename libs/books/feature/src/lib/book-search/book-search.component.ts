@@ -23,6 +23,8 @@ export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
   itemList: ReadingListItem[];
   readingList = this.store.select(getReadingList);
+  // Declare emptySearch here
+  emptySearch: boolean = false;
   searchForm = this.fb.group({
     term: ''
   });

@@ -35,24 +35,32 @@ const readingListReducer = createReducer(
       error: null
     };
   }),
-  on(ReadingListActions.loadReadingListSuccess, (state, action) => {
-    return readingListAdapter.setAll(action.list, {
-      ...state,
-      loaded: true
-    });
-  }),
-  on(ReadingListActions.loadReadingListError, (state, action) => {
-    return {
-      ...state,
-      error: action.error
-    };
-  }),
+  on(ReadingListActions.loadReadingListSuccess, (state, action) => ({
+    ...readingListAdapter.setAll(action.list, state),
+    loaded: true
+  })),
+  on(ReadingListActions.loadReadingListError, (state, action) => ({
+    ...state,
+    error: action.error
+  })),
   on(ReadingListActions.addToReadingList, (state, action) =>
     readingListAdapter.addOne({ bookId: action.book.id, ...action.book }, state)
   ),
   on(ReadingListActions.removeFromReadingList, (state, action) =>
     readingListAdapter.removeOne(action.item.bookId, state)
-  )
+  ),
+  on(ReadingListActions.confirmedUpdateFromReadingList, (state, action) =>
+    readingListAdapter.upsertOne({
+      bookId:  action.item.bookId,
+      ...action.item
+    }, state)
+  ),
+  on(ReadingListActions.failedUpdateFromReadingList, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    };
+  }),
 );
 
 export function reducer(state: State | undefined, action: Action) {
