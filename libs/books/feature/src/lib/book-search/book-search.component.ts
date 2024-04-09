@@ -14,6 +14,7 @@ import { Book, ReadingListItem } from '@tmo/shared/models';
 import { Subject } from 'rxjs';
 import { debounce, debounceTime } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
@@ -45,6 +46,8 @@ export class BookSearchComponent implements OnInit {
       }
     )
   }
+
+
   get searchTerm(): string {
     return this.searchForm.value.term;
   }
@@ -66,10 +69,12 @@ export class BookSearchComponent implements OnInit {
       this.itemList
     )
   }
+
   removeFromReadingList = (data:ReadingListItem[]) => {
     const item = data[data.length-1];
     this.store.dispatch(removeFromReadingList({ item }));
   }
+  
   actionConfirmation(msg, func, data) {
     const snackBarRef = this.snackBar.open(msg, 'Undo');
     snackBarRef.onAction().subscribe(() => {

@@ -10,7 +10,8 @@ import { Book } from '@tmo/shared/models';
   styleUrls: ['./reading-list.component.scss']
 })
 export class ReadingListComponent {
-readingList$ = this.store.select(getReadingList);
+  readingList$ = this.store.select(getReadingList);
+
   constructor(private readonly store: Store,
     private snackBar: MatSnackBar) {}
 
