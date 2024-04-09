@@ -24,6 +24,22 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Ignore .editorconfig file
+.editorconfig
+.prettierignore
+.prettierrc
+.vscode/
+
+# Ignore all files with the .log extension
+*.log
+
+# Ignore all files in the "build" directory
+build/
+
+# Ignore a specific directory and its contents
+my_directory/
+
+
 # misc
 /.sass-cache
 /connect.lock

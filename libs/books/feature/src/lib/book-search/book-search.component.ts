@@ -4,7 +4,9 @@ import {
   addToReadingList,
   clearSearch,
   getAllBooks,
+  getReadingList,
   ReadingListBook,
+  removeFromReadingList,
   searchBooks
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
@@ -19,6 +21,8 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
+  itemList: ReadingListItem[];
+  readingList = this.store.select(getReadingList);
 
   searchForm = this.fb.group({
     term: ''
@@ -53,6 +57,26 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+    this.actionConfirmation(
+      'Adding To reading list ' + book.title,
+      this.removeFromReadingList,
+      this.itemList
+    )
+  }
+
+  removeFromReadingList = (data:ReadingListItem[]) => {
+    const item = data[data.length-1];
+    this.store.dispatch(removeFromReadingList({ item }));
+  }
+  
+
+  actionConfirmation(msg, func, data) {
+    const snackBarRef = this.snackBar.open(msg, 'Undo');
+  
+    snackBarRef.onAction().subscribe(() => {
+      func(data);
+    });
+    
   }
 
   searchExample() {
