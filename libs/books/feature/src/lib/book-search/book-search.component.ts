@@ -10,10 +10,9 @@ import {
   searchBooks
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
-import { Book, ReadingListItem } from '@tmo/shared/models';
+import { Book } from '@tmo/shared/models';
 import { Subject } from 'rxjs';
-import { debounce, debounceTime } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'tmo-book-search',
@@ -34,19 +33,12 @@ export class BookSearchComponent implements OnInit {
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private readonly fb: FormBuilder
   ) {
     this.bookSubject.pipe(
       debounceTime(500)
     ).subscribe((res) => this.searchBooks());
-    this.readingList.subscribe(
-      itemList => {
-        this.itemList = itemList;
-      }
-    )
   }
-
 
   get searchTerm(): string {
     return this.searchForm.value.term;
