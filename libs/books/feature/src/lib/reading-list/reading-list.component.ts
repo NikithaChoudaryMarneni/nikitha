@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
-import { addToReadingList, getReadingList, removeFromReadingList } from '@tmo/books/data-access';
+import { addToReadingList, getReadingList, removeFromReadingList, updateFromReadingList } from '@tmo/books/data-access';
 import { Book } from '@tmo/shared/models';
 
 @Component({
@@ -24,9 +24,17 @@ export class ReadingListComponent {
     )
   }
 
+  updateFromReadingList(item) {
+    item = {
+      ...item,
+      finished: true,
+      finishedDate: new Date().toISOString()
+    };
+    this.store.dispatch(updateFromReadingList({ item }));
+  }
+
   actionConfirmation(msg, func, data) {
     const snackBarRef = this.snackBar.open(msg, 'Undo');
-  
     snackBarRef.onAction().subscribe(() => {
       func(data);
     });
@@ -34,5 +42,11 @@ export class ReadingListComponent {
 
   addBookToReadingList = (book: Book) => {
     this.store.dispatch(addToReadingList({ book }));
+  }
+
+  formatDate(date: void | string) {
+    return date
+      ? new Intl.DateTimeFormat('en-US').format(new Date(date))
+      : undefined;
   }
 }

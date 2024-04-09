@@ -20,7 +20,7 @@
   </form>
 
   <div class="row">
-    <div class="col" *ngIf="searchTerm; else empty">
+    <div class="col" *ngIf="searchTerm; else emptySearch">
       <div class="book-grid">
         <div class="book" data-testing="book-item" *ngFor="let b of books">
           <div class="book--title">
@@ -36,16 +36,23 @@
                 <div><strong>Publisher:</strong> {{ b.publisher }}</div>
                 <div><strong>Published:</strong> {{ formatDate(b.publishedDate) }}</div>
                 <p [innerHTML]="b.description"></p>
-                <button mat-flat-button color="primary" (click)="addBookToReadingList(b)" [disabled]="b.isAdded">
-                  Want to Read
-                </button>
+                <div>
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    (click)="addBookToReadingList(b)"
+                    [disabled]="b.isAdded"
+                    [attr.aria-label]="'Want to Read'"
+                  >
+                    {{b.finished ? 'Finished' : 'Want to Read'}}
+                  </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <ng-template #empty>
+    <ng-template #emptySearch>
       <div class="col empty">
         <p>
           Try searching for a topic, for example "<a (click)="searchExample()">JavaScript</a>".

@@ -23,7 +23,8 @@ export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
   itemList: ReadingListItem[];
   readingList = this.store.select(getReadingList);
-
+  // Declare emptySearch here
+  emptySearch: boolean = false;
   searchForm = this.fb.group({
     term: ''
   });
@@ -42,19 +43,16 @@ export class BookSearchComponent implements OnInit {
   get searchTerm(): string {
     return this.searchForm.value.term;
   }
-
   ngOnInit(): void {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
   }
-
   formatDate(date: void | string) {
     return date
       ? new Intl.DateTimeFormat('en-US').format(new Date(date))
       : undefined;
   }
-
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
     this.actionConfirmation(
@@ -69,21 +67,16 @@ export class BookSearchComponent implements OnInit {
     this.store.dispatch(removeFromReadingList({ item }));
   }
   
-
   actionConfirmation(msg, func, data) {
     const snackBarRef = this.snackBar.open(msg, 'Undo');
-  
     snackBarRef.onAction().subscribe(() => {
       func(data);
     });
-    
   }
-
   searchExample() {
     this.searchForm.controls.term.setValue('javascript');
     this.searchBooks();
   }
-
   searchBooks() {
     if (this.searchForm.value.term) {
       this.store.dispatch(searchBooks({ term: this.searchTerm }));
@@ -95,5 +88,4 @@ export class BookSearchComponent implements OnInit {
   searchBookTypeAhead() {
     this.bookSubject.next();
   }
-
 }
